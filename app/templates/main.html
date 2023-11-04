@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+	<title>Registration Form</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="static/main.css" />    <!-- file view -->
+	<link rel="stylesheet" type="text/css" href="/templates/static/main.css" />    <!-- localhost -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />    <!-- python flask server -->
+</head>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("registration-form").reset();
+});
+function validateForm() {
+    var elements = document.getElementsByTagName("input");
+    var emptyFields = [];
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].hasAttribute("required") && elements[i].value.trim() === "") {
+            emptyFields.push(elements[i].name);
+        }
+    }
+    if (emptyFields.length > 0) {
+        var errorMessage = "The following fields are required: " + emptyFields.join(", ");
+        document.getElementById("error-message").innerText = errorMessage;
+        return false;
+    }
+    return true;
+}
+function sendData() {
+	var form = document.getElementById("registration-form");
+
+	fetch('/submit', {
+		method: 'POST',
+		body: formData
+	})
+	.then(response => response.text())
+	.then(data => {
+		console.log(data);
+		// Handle response data as needed
+	})
+	.catch(error => {
+		console.error('Error:', error);
+	});
+}
+</script>
+<body>
+<h1>Welcome</h1>
+<h3><span>Register!</span> to become an active member</h3>
+<form id="registration-form" method="post" onsubmit="return validateForm()" action="/submit">
+	<h1>Register Account</h1>
+	<span>
+    	<input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+	</span>
+
+	<span>
+    	<input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+	</span>
+
+	<span>
+    	<input type="email" id="email" name="email" placeholder="Email" required>
+	</span>
+
+	<span>
+    	<input type="tel" id="phone" name="phone" placeholder="Phone" required>
+	</span>
+
+	<span>
+    	<input type="text" id="address" name="address" placeholder="Address" required>
+	</span>
+
+	<span>
+    	<select id="gender" name="gender" required>
+			<option value="" disabled selected hidden>Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+	</span>
+	
+	<span>
+    	<input type="date" id="dob" name="dob" placeholder="Date of Birth" required>
+	</span>
+	
+	<span>
+    	<select id="marital_status" name="marital_status" required>
+    		<option value="" disabled selected hidden>Marital Status</option>
+    		<option value="Single">Single</option>
+    		<option value="Married">Married</option>
+    		<option value="Widowed">Widowed</option>
+    		<option value="Separated">Separated</option>
+    		<option value="Divorced">Divorced</option>
+		</select>
+	</span>
+	
+	<span>
+    	<input type="password" id="password" name="password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}" title="Must contain at least one number, one uppercase letter, one lowercase letter, one special character, and at least 8 or more characters" required>
+	</span>
+	<span>
+		<input type="checkbox" id="check" required>
+		<label for="check">I agree to <a href="#">terms of Service</a> & <a href="#">Privacy Policy</a></label>
+	</span>
+	<span>
+    	<input type="submit" value="Submit" onclick="sendData()">
+	</span>
+	
+</form>
+
+</body>
+</html>
